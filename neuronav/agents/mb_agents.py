@@ -63,9 +63,7 @@ class MBV(BaseAgent):
                     if np.sum(self.T[a, s]) > 0:
                         s_1 = np.argmax(self.T[a, s])
                         q_1 = self.base_Q[:, s_1]
-                        v_next = self.w_value * np.max(q_1) + (
-                            1 - self.w_value
-                        ) * np.min(q_1)
+                        v_next = self.w_value * np.max(q_1) + (1 - self.w_value) * np.min(q_1)
                         self.base_Q[a, s] = self.w[s_1] + self.gamma * v_next
 
     def _update(self, current_exp, **kwargs):
