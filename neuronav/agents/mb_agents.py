@@ -145,9 +145,10 @@ class MBV_R(BaseAgent):
         beta: float = 1e4,
         epsilon: float = 1e-1,
         w_value: float = 1.0,
+        r_fun: ndarray
         **kwargs
     ):
-        super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon, r_fun)
+        super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon)
         self.weights = weights
         self.T = np.zeros([action_size, state_size, state_size])
         self.w = r_fun
