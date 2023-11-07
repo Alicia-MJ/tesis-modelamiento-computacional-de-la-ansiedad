@@ -9,6 +9,7 @@ import matplotlib.patches as patches
 import matplotlib.cm as cm
 
 
+
 def run_episode(
     env: Env,
     agent,
@@ -135,7 +136,7 @@ def plot_values_and_policy(
         _, ax = plt.subplots()
     else:
         ax = subplot
-    cmap = cm.get_cmap("RdBu")
+    cmap = plt.colormaps.get_cmap('RdBu')
     blue = cmap(1.0)
     red = cmap(0.0)
 

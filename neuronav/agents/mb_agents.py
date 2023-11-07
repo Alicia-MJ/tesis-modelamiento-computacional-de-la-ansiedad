@@ -63,9 +63,7 @@ class MBV(BaseAgent):
                     if np.sum(self.T[a, s]) > 0:
                         s_1 = np.argmax(self.T[a, s])
                         q_1 = self.base_Q[:, s_1]
-                        v_next = self.w_value * np.max(q_1) + (
-                            1 - self.w_value
-                        ) * np.min(q_1)
+                        v_next = self.w_value * np.max(q_1) + (1 - self.w_value) * np.min(q_1)
                         self.base_Q[a, s] = self.w[s_1] + self.gamma * v_next
 
     def _update(self, current_exp, **kwargs):
@@ -130,3 +128,71 @@ class SRMB(BaseAgent):
 
     def sample_action(self, state):
         return self.base_sample_action(self.q_estimates(state))
+
+
+class MBV_R(BaseAgent):
+    """
+    Implementation of Model-Based Value Iteration Algorithm
+    """
+
+    def __init__(
+        self,
+        state_size: int,
+        action_size: int,
+        lr: float = 1e-1,
+        gamma: float = 0.99,
+        poltype: str = "softmax",
+        beta: float = 1e4,
+        epsilon: float = 1e-1,
+        w_value: float = 1.0,
+        **kwargs
+    ):
+        super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon, r_fun)
+        self.weights = weights
+        self.T = np.zeros([action_size, state_size, state_size])
+        self.w = r_fun
+        self.base_Q = np.zeros([self.action_size, self.state_size])
+        self.w_value = w_value
+   
+
+    def q_estimate(self, state):
+        Q = self.Q
+        return Q[:, state]
+
+    def sample_action(self, state):
+        return self.base_sample_action(self.q_estimate(state))
+
+    def update_t(self, current_exp, next_exp=None, prospective=False):
+        s = current_exp[0]
+        s_a = current_exp[1]
+        s_1 = current_exp[2]
+        next_onehot = utils.onehot(s_1, self.state_size)
+        if not (self.T[s_a, s] == next_onehot).all():
+            self.T[s_a, s] = next_onehot
+            self.base_Q = np.zeros([self.action_size, self.state_size])
+            self.update_q(10)
+        return None
+
+    def update_q(self, iters=1):
+        for _ in range(iters):
+            for s in range(self.state_size):
+                for a in range(self.action_size):
+                    if np.sum(self.T[a, s]) > 0:
+                        s_1 = np.argmax(self.T[a, s])
+                        q_1 = self.base_Q[:, s_1]
+                        v_next = self.w_value * np.max(q_1) + (1 - self.w_value) * np.min(q_1)
+                        self.base_Q[a, s] = self.w[s_1] + self.gamma * v_next
+
+    def _update(self, current_exp, **kwargs):
+        self.update_t(current_exp, **kwargs)
+        self.update_q()
+        td_error = {"w": np.linalg.norm(w_error)}
+        return td_error
+
+    def get_policy(self):
+        Q = self.Q
+        return self.base_get_policy(Q)
+
+    @property
+    def Q(self):
+        return self.base_Q.copy()
