@@ -130,6 +130,8 @@ class SRMB(BaseAgent):
         return self.base_sample_action(self.q_estimates(state))
 
 
+
+
 class MBV_R(BaseAgent):
     """
     Implementation of Model-Based Value Iteration Algorithm
@@ -139,21 +141,22 @@ class MBV_R(BaseAgent):
         self,
         state_size: int,
         action_size: int,
-        r_fun,                      #numpy array with the reward function per state
+        r_fun,                #numpy array with the reward function per state
         lr: float = 1e-1,
         gamma: float = 0.99,
         poltype: str = "softmax",
         beta: float = 1e4,
         epsilon: float = 1e-1,
+        weights: str = "direct",
         w_value: float = 1.0,
         **kwargs
     ):
         super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon)
+        self.weights = weights
         self.T = np.zeros([action_size, state_size, state_size])
         self.w = r_fun
         self.base_Q = np.zeros([self.action_size, self.state_size])
         self.w_value = w_value
-   
 
     def q_estimate(self, state):
         Q = self.Q
@@ -161,6 +164,15 @@ class MBV_R(BaseAgent):
 
     def sample_action(self, state):
         return self.base_sample_action(self.q_estimate(state))
+
+    def update_w(self, current_exp):
+        s, a, s_1, r, _ = current_exp
+        if self.weights == "direct":
+            error = r - self.w[s_1]
+            self.w[s_1] += self.lr * error
+            if error > 0:
+                self.update_q(10)
+        return np.linalg.norm(error)
 
     def update_t(self, current_exp, next_exp=None, prospective=False):
         s = current_exp[0]
@@ -185,6 +197,7 @@ class MBV_R(BaseAgent):
 
     def _update(self, current_exp, **kwargs):
         self.update_t(current_exp, **kwargs)
+        w_error = self.update_w(current_exp)
         self.update_q()
         td_error = {"w": np.linalg.norm(w_error)}
         return td_error
