@@ -139,13 +139,13 @@ class MBV_R(BaseAgent):
         self,
         state_size: int,
         action_size: int,
+        r_fun,                      #numpy array with the reward function per state
         lr: float = 1e-1,
         gamma: float = 0.99,
         poltype: str = "softmax",
         beta: float = 1e4,
         epsilon: float = 1e-1,
         w_value: float = 1.0,
-        r_fun,                      #numpy array with the reward function per state
         **kwargs
     ):
         super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon)
