@@ -149,7 +149,6 @@ class MBV_R(BaseAgent):
         **kwargs
     ):
         super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon)
-        self.weights = weights
         self.T = np.zeros([action_size, state_size, state_size])
         self.w = r_fun
         self.base_Q = np.zeros([self.action_size, self.state_size])
