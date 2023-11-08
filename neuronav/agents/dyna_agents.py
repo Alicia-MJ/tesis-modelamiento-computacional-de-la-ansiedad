@@ -87,10 +87,10 @@ class DynaQ(TDQ):
             epsilon=epsilon,
             bootstrap=bootstrap,
             w_value=w_value,
-            num_recall=num_recall
 
         )
-        self.dyna = DynaModule(state_size, num_recall)
+        self.num_recall = num_recall
+        self.dyna = DynaModule(state_size, self.num_recall)
 
     def update(self, current_exp):
         _ = super().update(current_exp)
