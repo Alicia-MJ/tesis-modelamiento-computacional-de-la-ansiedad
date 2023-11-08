@@ -70,11 +70,12 @@ class DynaQ(TDQ):
         action_size: int,
         lr: float = 1e-1,
         gamma: float = 0.99,
-        poltype: str = "epsilon",
+        poltype: str = "egreedy",
         beta: float = 1e4,
         epsilon: float = 1e-1,
         w_value: float = 1.0,
-        bootstrap: str = "max-min"
+        bootstrap: str = "max-min", 
+        num_recall:int = 0,
     ):
         super(DynaQ, self).__init__(
             state_size,
@@ -86,9 +87,10 @@ class DynaQ(TDQ):
             epsilon=epsilon,
             bootstrap=bootstrap,
             w_value=w_value,
+            num_recall=num_recall
 
         )
-        self.dyna = DynaModule(state_size)
+        self.dyna = DynaModule(state_size, num_recall)
 
     def update(self, current_exp):
         _ = super().update(current_exp)
