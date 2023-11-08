@@ -70,10 +70,11 @@ class DynaQ(TDQ):
         action_size: int,
         lr: float = 1e-1,
         gamma: float = 0.99,
-        poltype: str = "softmax",
+        poltype: str = "epsilon",
         beta: float = 1e4,
         epsilon: float = 1e-1,
         w_value: float = 1.0,
+        boostrap: str = "max-min"
     ):
         super(DynaQ, self).__init__(
             state_size,
@@ -83,7 +84,9 @@ class DynaQ(TDQ):
             poltype=poltype,
             beta=beta,
             epsilon=epsilon,
+            boostrap=boostrap
             w_value=w_value,
+
         )
         self.dyna = DynaModule(state_size)
 
