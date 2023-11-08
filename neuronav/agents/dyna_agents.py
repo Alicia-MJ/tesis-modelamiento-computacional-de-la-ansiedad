@@ -70,19 +70,12 @@ class DynaQ(TDQ):
         action_size: int,
         lr: float = 1e-1,
         gamma: float = 0.99,
-<<<<<<< Updated upstream
-        poltype: str = "softmax",
-        beta: float = 1e4,
-        epsilon: float = 1e-1,
-        w_value: float = 1.0,
-=======
         poltype: str = "egreedy",
         beta: float = 1e4,
         epsilon: float = 1e-1,
         w_value: float = 1.0,
         bootstrap: str = "max-min", 
-        num_recall: int = 0
->>>>>>> Stashed changes
+        num_recall:int = 0
     ):
         super(DynaQ, self).__init__(
             state_size,
@@ -93,11 +86,9 @@ class DynaQ(TDQ):
             beta=beta,
             epsilon=epsilon,
             w_value=w_value,
-<<<<<<< Updated upstream
-=======
+            bootstrap=bootstrap,
             num_recall=num_recall
 
->>>>>>> Stashed changes
         )
         self.dyna = DynaModule(state_size, num_recall)
 
