@@ -84,7 +84,7 @@ class DynaQ(TDQ):
             poltype=poltype,
             beta=beta,
             epsilon=epsilon,
-            bootstrap=boostrap,
+            bootstrap=bootstrap,
             w_value=w_value,
 
         )
