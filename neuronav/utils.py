@@ -20,6 +20,7 @@ def run_episode(
     update_agent: bool = True,
     time_penalty: float = 0.0,
     collect_states: bool = False,
+    terminate_on_reward: bool = True
 ):
     """
     Performs a single episode of actions with the policy
@@ -30,6 +31,7 @@ def run_episode(
         objects=objects,
         random_start=random_start,
         time_penalty=time_penalty,
+        terminate_on_reward = terminate_on_reward
     )
     agent.reset()
     steps = 0
