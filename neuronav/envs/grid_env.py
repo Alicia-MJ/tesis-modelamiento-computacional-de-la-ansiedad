@@ -793,7 +793,13 @@ class GridEnv(Env):
             reward += reward_val
             if terminate:
                 self.done = True
-            self.objects["rewards"].pop(eval_pos)
+            else: 
+                if reward_val == 1.0:
+                    self.done = True
+                else:
+                    if reward <= -1.0:
+                        self.done = True
+            #self.objects["rewards"].pop(eval_pos)
 
         if eval_pos in self.objects["keys"]:
             self.keys += 1
