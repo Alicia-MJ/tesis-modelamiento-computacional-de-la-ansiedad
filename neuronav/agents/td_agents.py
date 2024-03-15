@@ -241,7 +241,7 @@ class TDSR(QAgent):
             Vs = self.q_estimate(state)[a]
             delta = reward + self.gamma * q_bootstrap - Vs
             # epsilon and beta are hard-coded, need to improve this
-            M = self.get_M_states(epsilon=1e-1, beta=5)
+            M = self.get_M_states()
             error = delta * M[state]
             self.w += self.lr * error
         return np.linalg.norm(error)
