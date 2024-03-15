@@ -230,6 +230,16 @@ class TDSR(QAgent):
         if self.weights == "direct":
             error = reward - self.w[state_1]
             self.w[state_1] += self.lr * error
+
+        elif self.weights == "td":
+            Vs = self.q_estimate(state).(max)
+            Vs_1 = self.q_estimate(state_1).max()
+            delta = reward + self.gamma * Vs_1 - Vs
+            # epsilon and beta are hard-coded, need to improve this
+            M = self.get_M_states()
+            error = delta * M[state]
+            self.w += self.lr * error
+
         elif self.weights == "max-min":
             s_a_1_optim = np.argmax(self.q_estimate(state_1))
             s_a_1_pessim = np.argmin(self.q_estimate(state_1))
@@ -237,21 +247,26 @@ class TDSR(QAgent):
                 self.w_value * self.q_estimate(state_1)[s_a_1_optim]
                 + (1 - self.w_value) * self.q_estimate(state_1)[s_a_1_pessim]
             )
-    
             Vs = self.q_estimate(state)[a]
             delta = reward + self.gamma * q_bootstrap - Vs
             # epsilon and beta are hard-coded, need to improve this
             M = self.get_M_states()
             error = delta * M[state]
             self.w += self.lr * error
+
+
         return np.linalg.norm(error)
 
     def update_sr(self, s, s_a, s_1, d, next_exp=None, prospective=False):
         # determines whether update is on-policy or off-policy
         if next_exp is None:
-            s_a_1 = np.argmax(self.q_estimate(s_1))
-        else:
-            s_a_1 = next_exp[1]
+            
+            s_a_1_optim = np.argmax(self.q_estimate(s_1))
+            s_a_1_pessim = np.argmin(self.q_estimate(s_1))          
+
+        #faltaría ajustar el código para cuando sí se pase el argumento de next_exp
+        #else:
+        #    s_a_1 = next_exp[1]
 
         I = utils.onehot(s, self.state_size)
         if d:
@@ -260,6 +275,10 @@ class TDSR(QAgent):
             )
         else:
             if self.goal_biased_sr:
+
+                next_m =  (       self.w_value * self.m_estimate(s_1)[s_a_1_optim]
+                + (1 - self.w_value) * self.m_estimate(s_1)[s_a_1_pessim]            )
+
                 next_m = self.m_estimate(s_1)[s_a_1]
             else:
                 next_m = self.m_estimate(s_1).mean(0)
