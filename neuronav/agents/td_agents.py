@@ -279,7 +279,6 @@ class TDSR(QAgent):
                 next_m =  (       self.w_value * self.m_estimate(s_1)[s_a_1_optim]
                 + (1 - self.w_value) * self.m_estimate(s_1)[s_a_1_pessim]            )
 
-                next_m = self.m_estimate(s_1)[s_a_1]
             else:
                 next_m = self.m_estimate(s_1).mean(0)
             m_error = I + self.gamma * next_m - self.M[s_a, s, :]
