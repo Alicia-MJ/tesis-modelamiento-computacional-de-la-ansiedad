@@ -232,7 +232,7 @@ class TDSR(QAgent):
             self.w[state_1] += self.lr * error
 
         elif self.weights == "td":
-            Vs = self.q_estimate(state).(max)
+            Vs = self.q_estimate(state).max()
             Vs_1 = self.q_estimate(state_1).max()
             delta = reward + self.gamma * Vs_1 - Vs
             # epsilon and beta are hard-coded, need to improve this
