@@ -289,7 +289,7 @@ class TDSR(QAgent):
 
     def get_M_states(self):
         # average M(a, s, s') according to policy to get M(s, s')
-        policy = self.get_policy(beta=self.beta)
+        policy = self.get_policy()
         M = np.diagonal(np.tensordot(policy.T, self.M, axes=1), axis1=0, axis2=1).T
         return M
 
