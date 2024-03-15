@@ -235,7 +235,7 @@ class TDSR(QAgent):
             s_a_1_pessim = np.argmin(self.q_estimate(state_1))
             q_bootstrap = (
                 self.w_value * self.q_estimate(state_1)[s_a_1_optim]
-                + (1 - self.w_value) * self.q_estimate(s_1)[s_a_1_pessim]
+                + (1 - self.w_value) * self.q_estimate(state_1)[s_a_1_pessim]
             )
     
             Vs = self.q_estimate(state)[a]
