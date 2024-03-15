@@ -226,14 +226,20 @@ class TDSR(QAgent):
         logits = self.q_estimate(state)
         return self.base_sample_action(logits)
 
-    def update_w(self, state, state_1, reward):
+    def update_w(self, state, state_1, reward, a):
         if self.weights == "direct":
             error = reward - self.w[state_1]
             self.w[state_1] += self.lr * error
-        elif self.weights == "td":
-            Vs = self.q_estimate(state).max()
-            Vs_1 = self.q_estimate(state_1).max()
-            delta = reward + self.gamma * Vs_1 - Vs
+        elif self.weights == "max-min":
+            s_a_1_optim = np.argmax(self.q_estimate(state_1))
+            s_a_1_pessim = np.argmin(self.q_estimate(state_1))
+            q_bootstrap = (
+                self.w_value * self.q_estimate(state_1)[s_a_1_optim]
+                + (1 - self.w_value) * self.q_estimate(s_1)[s_a_1_pessim]
+            )
+    
+            Vs = self.q_estimate(state)[a]
+            delta = reward + self.gamma * q_bootstrap - Vs
             # epsilon and beta are hard-coded, need to improve this
             M = self.get_M_states(epsilon=1e-1, beta=5)
             error = delta * M[state]
@@ -267,7 +273,7 @@ class TDSR(QAgent):
     def _update(self, current_exp, **kwargs):
         s, a, s_1, r, d = current_exp
         m_error = self.update_sr(s, a, s_1, d, **kwargs)
-        w_error = self.update_w(s, s_1, r)
+        w_error = self.update_w(s, s_1, r, a)
         q_error = self.q_error(s, a, s_1, r, d)
         return q_error
 

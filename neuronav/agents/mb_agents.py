@@ -134,7 +134,7 @@ class SRMB(BaseAgent):
 
 class MBV_R(BaseAgent):
     """
-    Implementation of Model-Based Value Iteration Algorithm
+    Implementation of Model-Based Value Iteration Algorithm with the reward function given
     """
 
     def __init__(
