@@ -155,7 +155,6 @@ class DynaSR(TDSR):
             beta=beta,
             epsilon=epsilon,
             w_value=w_value,
-            num_recall=num_recall,
         )
         self.num_recall = num_recall
         self.dyna = DynaModule(state_size, self.num_recall)
