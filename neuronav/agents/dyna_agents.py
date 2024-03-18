@@ -142,6 +142,8 @@ class DynaSR(TDSR):
         poltype: str = "softmax",
         beta: float = 1e4,
         epsilon: float = 1e-1,
+        w_value: float = 1.0,
+
     ):
         super(DynaSR, self).__init__(
             state_size,
@@ -151,6 +153,7 @@ class DynaSR(TDSR):
             poltype=poltype,
             beta=beta,
             epsilon=epsilon,
+            w_value=w_value,
         )
         self.dyna = DynaModule(state_size)
 
