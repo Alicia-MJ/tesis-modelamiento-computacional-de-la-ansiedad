@@ -143,6 +143,7 @@ class DynaSR(TDSR):
         beta: float = 1e4,
         epsilon: float = 1e-1,
         w_value: float = 1.0,
+        num_recall:int = 0,
 
     ):
         super(DynaSR, self).__init__(
@@ -154,8 +155,12 @@ class DynaSR(TDSR):
             beta=beta,
             epsilon=epsilon,
             w_value=w_value,
+            num_recall=num_recall,
         )
-        self.dyna = DynaModule(state_size)
+        self.num_recall = num_recall
+        self.dyna = DynaModule(state_size, self.num_recall)
+
+
 
     def update(self, current_exp):
         _ = super().update(current_exp)
