@@ -30,8 +30,8 @@ class MBV(BaseAgent):
         self.w = np.zeros(state_size)
         self.base_Q = np.zeros([self.action_size, self.state_size])
         self.w_value = w_value
-        max_iter = max_iter
-        tol = tol
+        self.max_iter = max_iter
+        self.tol = tol
 
     def q_estimate(self, state):
         Q = self.Q
