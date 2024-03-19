@@ -115,12 +115,14 @@ class SRMB(BaseAgent):
         weights: str = "direct",
         max_iter: int = 1,
         tol: float = 0.01,
+        w_value: float = 1.0,
         **kwargs
     ):
         super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon)
         self.mix = mix
         self.max_iter = max_iter
         self.tol = tol
+        self.w_value = w_value
 
         self.MB_agent = MBV(
             state_size, action_size, lr, gamma, poltype, beta, epsilon, weights
