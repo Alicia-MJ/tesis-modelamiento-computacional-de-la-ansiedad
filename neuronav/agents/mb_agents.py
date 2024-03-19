@@ -117,8 +117,11 @@ class SRMB(BaseAgent):
         tol: float = 0.01,
         **kwargs
     ):
-        super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon, max_iter, tol)
+        super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon)
         self.mix = mix
+        self.max_iter = max_iter
+        self.tol = tol
+
         self.MB_agent = MBV(
             state_size, action_size, lr, gamma, poltype, beta, epsilon, weights
         )
