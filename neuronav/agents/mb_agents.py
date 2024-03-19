@@ -75,7 +75,6 @@ class MBV(BaseAgent):
 
             delta = np.abs(self.Q - q)
             if np.all(delta < self.tol): 
-                print(num_iteration)
                 break
 
         
