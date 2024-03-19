@@ -45,8 +45,8 @@ class MBV(BaseAgent):
         if self.weights == "direct":
             error = r - self.w[s_1]
             self.w[s_1] += self.lr * error
-            if error > 0:
-                self.update_q(10)
+            #if error > 0:
+                #self.update_q()
         return np.linalg.norm(error)
 
     def update_t(self, current_exp, next_exp=None, prospective=False):
@@ -57,7 +57,7 @@ class MBV(BaseAgent):
         if not (self.T[s_a, s] == next_onehot).all():
             self.T[s_a, s] = next_onehot
             self.base_Q = np.zeros([self.action_size, self.state_size])
-            self.update_q(10)
+            #self.update_q()
         return None
 
     def update_q(self, max_iter=1):
@@ -81,7 +81,7 @@ class MBV(BaseAgent):
     def _update(self, current_exp, **kwargs):
         self.update_t(current_exp, **kwargs)
         w_error = self.update_w(current_exp)
-        self.update_q()
+        self.update_q(self.max_iter)
         td_error = {"w": np.linalg.norm(w_error)}
         return td_error
 
