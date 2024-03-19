@@ -20,6 +20,8 @@ class MBV(BaseAgent):
         epsilon: float = 1e-1,
         weights: str = "direct",
         w_value: float = 1.0,
+        max_iter: int = 1,
+        tol : float = 0.01,
         **kwargs
     ):
         super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon)
@@ -28,6 +30,8 @@ class MBV(BaseAgent):
         self.w = np.zeros(state_size)
         self.base_Q = np.zeros([self.action_size, self.state_size])
         self.w_value = w_value
+        max_iter = max_iter
+        tol = tol
 
     def q_estimate(self, state):
         Q = self.Q
@@ -56,8 +60,11 @@ class MBV(BaseAgent):
             self.update_q(10)
         return None
 
-    def update_q(self, iters=1):
-        for _ in range(iters):
+    def update_q(self, max_iter=1):
+        for _ in range(max_iter):
+
+            q = self.Q
+
             for s in range(self.state_size):
                 for a in range(self.action_size):
                     if np.sum(self.T[a, s]) > 0:
@@ -65,6 +72,11 @@ class MBV(BaseAgent):
                         q_1 = self.base_Q[:, s_1]
                         v_next = self.w_value * np.max(q_1) + (1 - self.w_value) * np.min(q_1)
                         self.base_Q[a, s] = self.w[s_1] + self.gamma * v_next
+
+            delta = np.abs(self.Q - q)
+            if np.all(delta < self.tol): break
+
+
 
     def _update(self, current_exp, **kwargs):
         self.update_t(current_exp, **kwargs)
@@ -98,9 +110,11 @@ class SRMB(BaseAgent):
         epsilon: float = 1e-1,
         mix: float = 0.5,
         weights: str = "direct",
+        max_iter: int = 1,
+        tol: float = 0.01,
         **kwargs
     ):
-        super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon)
+        super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon, max_iter, tol)
         self.mix = mix
         self.MB_agent = MBV(
             state_size, action_size, lr, gamma, poltype, beta, epsilon, weights
