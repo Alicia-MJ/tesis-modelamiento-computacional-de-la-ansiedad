@@ -125,7 +125,7 @@ class SRMB(BaseAgent):
         self.w_value = w_value
 
         self.MB_agent = MBV(
-            state_size, action_size, lr, gamma, poltype, beta, epsilon, weights, w_value
+            state_size, action_size, lr, gamma, poltype, beta, epsilon, weights, w_value, max_iter, tol
         )
         self.SR_agent = TDSR(
             state_size, action_size, lr, gamma, poltype, beta, epsilon, None, weights, w_value
