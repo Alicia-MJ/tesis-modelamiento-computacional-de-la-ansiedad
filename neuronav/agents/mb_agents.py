@@ -61,7 +61,7 @@ class MBV(BaseAgent):
         return None
 
     def update_q(self, max_iter=1):
-        for _ in range(max_iter):
+        for num_iteration in range(max_iter):
 
             q = self.Q
 
@@ -75,6 +75,8 @@ class MBV(BaseAgent):
 
             delta = np.abs(self.Q - q)
             if np.all(delta < self.tol): break
+
+        print(num_iteration)
 
 
 
