@@ -74,9 +74,11 @@ class MBV(BaseAgent):
                         self.base_Q[a, s] = self.w[s_1] + self.gamma * v_next
 
             delta = np.abs(self.Q - q)
-            if np.all(delta < self.tol): break
+            if np.all(delta < self.tol): 
+                print(num_iteration)
+                break
 
-        print(num_iteration)
+        
 
 
 
