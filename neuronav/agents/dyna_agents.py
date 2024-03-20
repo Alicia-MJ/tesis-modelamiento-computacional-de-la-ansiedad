@@ -143,7 +143,7 @@ class DynaSR(TDSR):
         beta: float = 1e4,
         epsilon: float = 1e-1,
         w_value: float = 1.0,
-        num_recall:int = 5,
+        num_recall:int = 25,
 
     ):
         super(DynaSR, self).__init__(
