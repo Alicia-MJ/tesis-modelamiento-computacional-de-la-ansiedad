@@ -105,10 +105,14 @@ class GraphEnv(Env):
         random_start: bool = False,
         time_penalty: float = 0.0,
         stochasticity: float = 0.0,
+        terminate_on_reward: bool = False #added to no have conflict when this variable is used in grid.env 
     ):
         """
         Resets the environment to initial configuration.
         """
+
+        self.terminate_on_reward = terminate_on_reward #this variable does nothing for the moment
+
         self.running = True
         self.stochasticity = stochasticity
         self.time_penalty = time_penalty
