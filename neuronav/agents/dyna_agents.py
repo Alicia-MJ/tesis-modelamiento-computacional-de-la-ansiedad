@@ -8,7 +8,7 @@ class DynaModule:
     Class which contains logic to enable Dyna algorithms.
     """
 
-    def __init__(self, state_size, num_recall=3, recency="exponential", **kwargs):
+    def __init__(self, state_size, num_recall=5, recency="exponential", **kwargs):
         self.num_recall = num_recall
         self.recency = recency
         self.model = {}
@@ -75,7 +75,7 @@ class DynaQ(TDQ):
         epsilon: float = 1e-1,
         w_value: float = 1.0,
         bootstrap: str = "max-min", 
-        num_recall:int = 0,
+        num_recall:int = 5,
     ):
         super(DynaQ, self).__init__(
             state_size,
@@ -143,7 +143,7 @@ class DynaSR(TDSR):
         beta: float = 1e4,
         epsilon: float = 1e-1,
         w_value: float = 1.0,
-        num_recall:int = 0,
+        num_recall:int = 5,
 
     ):
         super(DynaSR, self).__init__(
