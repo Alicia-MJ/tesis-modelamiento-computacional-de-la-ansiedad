@@ -187,12 +187,12 @@ class DynaSR_RP(TDSR_RP):
         super(DynaSR_RP, self).__init__(
             state_size,
             action_size,
-            lr_r=lr,
-            lr_p=lr_p,
+            lr=lr,
             gamma=gamma,
             poltype=poltype,
             beta=beta,
             epsilon=epsilon,
+            lr_p=lr_p,
         )
         self.num_recall = num_recall
         self.dyna = DynaModule(state_size, self.num_recall)
