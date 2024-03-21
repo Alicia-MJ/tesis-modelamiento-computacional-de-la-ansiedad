@@ -184,7 +184,7 @@ class DynaSR_RP(TDSR_RP):
         num_recall:int = 5,
 
     ):
-        super(DynaSR, self).__init__(
+        super(DynaSR_RP, self).__init__(
             state_size,
             action_size,
             lr_r=lr_r,
