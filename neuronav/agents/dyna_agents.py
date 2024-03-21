@@ -175,7 +175,7 @@ class DynaSR_RP(TDSR_RP):
         self,
         state_size: int,
         action_size: int,
-        lr_r: float = 1e-1,
+        lr: float = 1e-1,
         gamma: float = 0.99,
         poltype: str = "softmax",
         beta: float = 1e4,
@@ -187,7 +187,7 @@ class DynaSR_RP(TDSR_RP):
         super(DynaSR_RP, self).__init__(
             state_size,
             action_size,
-            lr_r=lr_r,
+            lr_r=lr,
             lr_p=lr_p,
             gamma=gamma,
             poltype=poltype,
