@@ -176,12 +176,12 @@ class DynaSR_RP(TDSR_RP):
         state_size: int,
         action_size: int,
         lr_r: float = 1e-1,
-        lr_p: float = 1e-1,
         gamma: float = 0.99,
         poltype: str = "softmax",
         beta: float = 1e4,
         epsilon: float = 1e-1,
         num_recall:int = 5,
+        lr_p: float = 1e-1,
 
     ):
         super(DynaSR_RP, self).__init__(
