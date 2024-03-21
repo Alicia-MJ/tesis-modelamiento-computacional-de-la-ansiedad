@@ -1,6 +1,6 @@
 import numpy as np
 import numpy.random as npr
-from neuronav.agents.td_agents import TDAC, TDQ, TDSR
+from neuronav.agents.td_agents import TDAC, TDQ, TDSR, TDSR_RP
 
 
 class DynaModule:
@@ -8,7 +8,7 @@ class DynaModule:
     Class which contains logic to enable Dyna algorithms.
     """
 
-    def __init__(self, state_size, num_recall=4, recency="exponential", **kwargs):
+    def __init__(self, state_size, num_recall=5, recency="exponential", **kwargs):
         self.num_recall = num_recall
         self.recency = recency
         self.model = {}
@@ -143,7 +143,7 @@ class DynaSR(TDSR):
         beta: float = 1e4,
         epsilon: float = 1e-1,
         w_value: float = 1.0,
-        num_recall:int = 4,
+        num_recall:int = 5,
 
     ):
         super(DynaSR, self).__init__(
@@ -164,3 +164,42 @@ class DynaSR(TDSR):
     def update(self, current_exp):
         _ = super().update(current_exp)
         self = self.dyna.update(self, current_exp)
+
+
+class DynaSR_RP(TDSR_RP):
+    """
+    Dyna-enabled version of Temporal Difference Successor Representation algorithm.
+    """
+
+    def __init__(
+        self,
+        state_size: int,
+        action_size: int,
+        lr_r: float = 1e-1,
+        lr_p: float = 1e-1,
+        gamma: float = 0.99,
+        poltype: str = "softmax",
+        beta: float = 1e4,
+        epsilon: float = 1e-1,
+        num_recall:int = 5,
+
+    ):
+        super(DynaSR, self).__init__(
+            state_size,
+            action_size,
+            lr_r=lr_r,
+            lr_p=lr_p,
+            gamma=gamma,
+            poltype=poltype,
+            beta=beta,
+            epsilon=epsilon,
+        )
+        self.num_recall = num_recall
+        self.dyna = DynaModule(state_size, self.num_recall)
+
+
+
+    def update(self, current_exp):
+        _ = super().update(current_exp)
+        self = self.dyna.update(self, current_exp)
+
