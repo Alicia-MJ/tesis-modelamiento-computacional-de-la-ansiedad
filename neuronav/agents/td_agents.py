@@ -327,8 +327,7 @@ class TDSR_RP(QAgent):
         self,
         state_size: int,
         action_size: int,
-        lr_r: float = 1e-1,
-        lr_p: float = 1e-1,
+        lr: float = 1e-1,
         gamma: float = 0.99,
         poltype: str = "softmax",
         beta: float = 1e4,
@@ -337,17 +336,18 @@ class TDSR_RP(QAgent):
         weights: str = "rew_pun",
         goal_biased_sr: bool = True,
         bootstrap: str = "max-min",
+        lr_p: float = 1e-1,
     ):
         super().__init__(
             state_size,
             action_size,
+            lr,
             gamma,
             poltype,
             beta,
             epsilon,
             bootstrap,
         )
-        self.lr_r=lr_r
         self.lr_p=lr_p
         self.weights = weights
         self.goal_biased_sr = goal_biased_sr
@@ -383,7 +383,7 @@ class TDSR_RP(QAgent):
 
             if reward>=0:
                 error = reward - self.w_r[state_1]
-                self.w_r[state_1] += self.lr_r * error
+                self.w_r[state_1] += self.lr * error
             elif reward<0:
                 error = reward - self.w_p[state_1]
                 self.w_p[state_1] += self.lr_p * error
@@ -425,7 +425,7 @@ class TDSR_RP(QAgent):
 
         if not prospective:
             # actually perform update to SR if not prospective
-            self.M[s_a, s, :] += self.lr_r * m_error
+            self.M[s_a, s, :] += self.lr * m_error
         return m_error
 
     def _update(self, current_exp, **kwargs):
