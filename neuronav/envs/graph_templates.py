@@ -14,6 +14,7 @@ class GraphTemplate(enum.Enum):
     t_loop = "t_loop"
     variable_magnitude = "variable_magnitude"
     three_arm_bandit = "three_arm_bandit"
+    two_arm_bandit = "two_arm_bandit"
 
 
 def two_step():
@@ -22,6 +23,12 @@ def two_step():
     objects = {"rewards": reward_locs}
     return objects, edges
 
+
+def two_arm_bandit():
+    reward_locs = {1: 1, 2: 0.5}
+    edges = [[1, 2, 3], [], []]
+    objects = {"rewards": reward_locs}
+    return objects, edges
 
 def three_arm_bandit():
     reward_locs = {1: 1, 2: 0.5, 3: -0.5}
@@ -158,4 +165,5 @@ template_map = {
     GraphTemplate.t_loop: t_loop,
     GraphTemplate.variable_magnitude: variable_magnitude,
     GraphTemplate.three_arm_bandit: three_arm_bandit,
+    GraphTemplate.two_arm_bandit: two_arm_bandit,
 }
