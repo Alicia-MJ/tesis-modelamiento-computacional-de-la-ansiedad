@@ -269,10 +269,10 @@ def plot_values_and_policy_half(
         V = np.zeros([env.grid_size, env.grid_size])
     if plot_sr is None:
         im = ax.imshow(
-            V.reshape(env.grid_size, env.grid_size), cmap="RdBu", vmin=-0.5, vmax=0.5
+            V.reshape(env.grid_size, env.grid_size), cmap="RdBu", vmin=-0.3, vmax=0.3
         )
     else:
-        im = ax.imshow(plot_sr, cmap="PiYG", vmin=-0.5, vmax=0.5)
+        im = ax.imshow(plot_sr, cmap="PiYG", vmin=-0.3, vmax=0.3)
     for i in range(env.grid_size):
         for j in range(env.grid_size):
             if rollout:
