@@ -17,6 +17,7 @@ class BaseAgent:
         poltype: str = "softmax",
         beta: float = 1e4,
         epsilon: float = 1e-1,
+        lapse: float = 0.0,
     ):
         self.state_size = state_size
         self.action_size = action_size
@@ -26,11 +27,19 @@ class BaseAgent:
         self.poltype = poltype
         self.num_updates = 0
         self.epsilon = epsilon
+        self.lapse = lapse
+
 
     def base_sample_action(self, policy_logits):
         if self.poltype == "softmax":
             action = npr.choice(
                 self.action_size, p=utils.softmax(self.beta * policy_logits)
+            )
+        elif self.poltype == "s_lapse":
+            p = utils.softmax(self.beta * policy_logits)*(1-self.lapse)+(self.lapse/4)
+            
+            action = npr.choice(
+                self.action_size, p
             )
         else:
             if npr.rand() < self.epsilon:
@@ -38,6 +47,8 @@ class BaseAgent:
             else:
                 action = np.argmax(policy_logits)
         return action
+
+
 
     def update(self, current_exp):
         self.num_updates += 1
