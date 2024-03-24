@@ -20,8 +20,9 @@ class QAgent(BaseAgent):
         epsilon: float = 1e-1,
         bootstrap: str = "max-min",
         w_value: float = 1.0,
+        lapse: float = 0.0,
     ):
-        super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon)
+        super().__init__(state_size, action_size, lr, gamma, poltype, beta, epsilon, lapse)
         self.bootstrap = bootstrap
         self.w_value = w_value
 
@@ -148,10 +149,10 @@ class TDQ_RPL(QAgent):
             epsilon,
             bootstrap,
             w_value,
+            lapse,
         )
 
         self.lr_p = lr_p
-        self.lapse = lapse
 
 
         if Q_init is None:
