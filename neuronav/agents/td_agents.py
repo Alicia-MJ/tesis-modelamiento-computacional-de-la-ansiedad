@@ -118,6 +118,85 @@ class TDQ(QAgent):
         return self.base_get_policy(self.Q)
 
 
+class TDQ_RPL(QAgent):
+    """
+    Implementation of one-step temporal difference (TD) Q-Learning Algorithm.
+    """
+
+    def __init__(
+        self,
+        state_size: int,
+        action_size: int,
+        lr: float = 1e-1,
+        gamma: float = 0.99,
+        poltype: str = "s_lapse",
+        beta: float = 1e4,
+        epsilon: float = 1e-1,
+        Q_init=None,
+        bootstrap: str = "softmax",
+        w_value: float = 1.0,
+        lr_p: float = 0.0, 
+        lapse: float =0.0, 
+    ):
+        super().__init__(
+            state_size,
+            action_size,
+            lr,
+            gamma,
+            poltype,
+            beta,
+            epsilon,
+            bootstrap,
+            w_value,
+            lapse,
+        )
+
+        self.lr_p = lr_p
+
+
+        if Q_init is None:
+            self.Q = np.zeros((action_size, state_size))
+        elif np.isscalar(Q_init):
+            self.Q = Q_init * npr.randn(action_size, state_size)
+        else:
+            self.Q = Q_init
+
+    def q_estimate(self, state):
+        return self.Q[:, state]
+
+    def v_estimate(self, state):
+        q = self.q_estimate(state)
+        return np.sum(q * utils.softmax(q * self.beta))
+
+    def sample_action(self, state):
+        return self.base_sample_action(self.q_estimate(state))
+
+    def update_q(self, current_exp, prospective=False):
+        s, s_a, s_1, r, d = current_exp
+        q_error = self.q_error(s, s_a, s_1, r, d)
+
+        if not prospective:
+            # actually perform update to Q if not prospective
+
+            if r >=0:
+                lr = self.lr
+            elif r<0:
+                lr = self.lr_p
+
+            self.Q[s_a, s] += lr * q_error
+        return q_error
+
+    def _update(self, current_exp, **kwargs):
+        q_error = self.update_q(current_exp, **kwargs)
+        return q_error
+
+    def get_policy(self):
+        return self.base_get_policy(self.Q)
+
+
+
+
+
 class TDAC(BaseAgent):
     """
     Implementation of one-step temporal difference (TD) Actor Critic Algorithm
