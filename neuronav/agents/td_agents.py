@@ -148,10 +148,10 @@ class TDQ_RPL(QAgent):
             epsilon,
             bootstrap,
             w_value,
-            lapse,
         )
 
         self.lr_p = lr_p
+        self.lapse = lapse
 
 
         if Q_init is None:
