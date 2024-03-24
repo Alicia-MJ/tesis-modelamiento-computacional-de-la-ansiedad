@@ -36,10 +36,9 @@ class BaseAgent:
                 self.action_size, p=utils.softmax(self.beta * policy_logits)
             )
         elif self.poltype == "s_lapse":
-            p = utils.softmax(self.beta * policy_logits)*(1-self.lapse)+(self.lapse/4)
-            
+
             action = npr.choice(
-                self.action_size, p
+                self.action_size, p = utils.softmax(self.beta * policy_logits)*(1-self.lapse)+(self.lapse/4)
             )
         else:
             if npr.rand() < self.epsilon:
