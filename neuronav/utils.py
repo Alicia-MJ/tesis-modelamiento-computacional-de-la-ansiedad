@@ -217,6 +217,129 @@ def plot_values_and_policy(
     return ax
 
 
+
+def plot_values_and_policy_half(
+    agent,
+    env,
+    start_pos: list,
+    plot_title: str = None,
+    rollout: bool = True,
+    objects: dict = None,
+    subplot=None,
+    plot_sr=None,
+):
+    """
+    Plots the V(s) and argmax policy for a given agent in a given environment.
+    Agent must have an `agent.Q` function.
+    """
+    arrows = [
+        [0, 0.5, 0, -0.5],
+        [-0.5, 0, 0.5, 0],
+        [0, -0.5, 0, 0.5],
+        [0.5, 0, -0.5, 0],
+        [0, 0, 0, 0],
+    ]
+
+    states = []
+    if rollout:
+        _, _, _, states = run_episode(
+            env,
+            agent,
+            100,
+            start_pos,
+            collect_states=True,
+            update_agent=False,
+            objects=objects,
+        )
+
+    if objects is None:
+        objects = env.template_objects
+
+    if subplot is None:
+        _, ax = plt.subplots()
+    else:
+        ax = subplot
+    cmap = plt.colormaps.get_cmap('RdBu')
+    blue = cmap(1.0)
+    red = cmap(0.0)
+
+    if agent is not None:
+        V = agent.Q.mean(0)
+    else:
+        V = np.zeros([env.grid_size, env.grid_size])
+    if plot_sr is None:
+        im = ax.imshow(
+            V.reshape(env.grid_size, env.grid_size), cmap="RdBu", vmin=-0.5, vmax=0.5
+        )
+    else:
+        im = ax.imshow(plot_sr, cmap="PiYG", vmin=-0.5, vmax=0.5)
+    for i in range(env.grid_size):
+        for j in range(env.grid_size):
+            if rollout:
+                if env.get_observation([i, j]) in states:
+                    use_alpha = 1.0
+                else:
+                    use_alpha = 0.25
+            else:
+                use_alpha = 0.5
+            if agent is not None:
+                use_dir = agent.Q.argmax(0).reshape(env.grid_size, env.grid_size)[i, j]
+                use_arrow = arrows[use_dir].copy()
+                use_arrow[0] += j
+                use_arrow[1] += i
+            if [i, j] not in env.blocks:
+                if [i, j] == list(start_pos):
+                    ax.text(
+                        j,
+                        i + 0.25,
+                        "S",
+                        fontdict={"fontsize": 16, "weight": "bold", "ha": "center"},
+                    )
+                elif (i, j) in objects["rewards"].keys():
+                    reward_val = objects["rewards"][(i, j)]
+                    if reward_val > 0:
+                        use_color = cmap(0.75)
+                    else:
+                        use_color = cmap(0.25)
+                    box = patches.Rectangle(
+                        (j - 0.5, i - 0.5), 1.0, 1.0, color=use_color, alpha=0.5
+                    )
+                    ax.add_patch(box)
+                    ax.text(
+                        j,
+                        i + 0.15,
+                        str(reward_val),
+                        fontdict={"fontsize": 11, "ha": "center"},
+                    )
+                else:
+                    if agent is not None and plot_sr is None:
+                        ax.arrow(
+                            use_arrow[0],
+                            use_arrow[1],
+                            use_arrow[2],
+                            use_arrow[3],
+                            head_width=0.33,
+                            head_length=0.33,
+                            fc="k",
+                            ec="k",
+                            alpha=use_alpha,
+                        )
+            else:
+                box = patches.Rectangle(
+                    (j - 0.33, i - 0.33), 0.66, 0.66, color="black", alpha=0.25
+                )
+                ax.add_patch(box)
+    if agent is not None:
+        cbar = plt.colorbar(im, ax=ax)
+        cbar.set_label("Value Estimates", rotation=270, labelpad=20, fontsize=14)
+    if plot_title != None:
+        ax.set_title(plot_title)
+    plt.tick_params(axis="both", labelsize=0, length=0)
+    return ax
+
+
+
+
 # Taken from https://mattpetersen.github.io/load-cifar10-with-numpy
 def cifar10(path=None):
     r"""Return (train_images, train_labels, test_images, test_labels).
