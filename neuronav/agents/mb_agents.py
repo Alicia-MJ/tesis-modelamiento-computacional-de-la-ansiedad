@@ -78,9 +78,6 @@ class MBV(BaseAgent):
                 break
 
         
-
-
-
     def _update(self, current_exp, **kwargs):
         self.update_t(current_exp, **kwargs)
         w_error = self.update_w(current_exp)

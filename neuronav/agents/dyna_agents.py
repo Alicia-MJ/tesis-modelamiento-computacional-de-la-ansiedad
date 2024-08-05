@@ -55,7 +55,7 @@ class DynaModule:
             exp = self._sample_model()
             self.prioritized_states[exp[0]] += 1
             base_agent._update(exp)
-
+        print( "base_agent ="+str(base_agent))
         return base_agent
 
 
