@@ -106,6 +106,9 @@ def plot_values_and_policy(
     objects: dict = None,
     subplot=None,
     plot_sr=None,
+    vmin=-1.0,
+    vmax=1.0
+
 ):
     """
     Plots the V(s) and argmax policy for a given agent in a given environment.
@@ -128,7 +131,7 @@ def plot_values_and_policy(
             start_pos,
             collect_states=True,
             update_agent=False,
-            objects=objects,
+            objects=objects
         )
 
     if objects is None:
@@ -148,7 +151,7 @@ def plot_values_and_policy(
         V = np.zeros([env.grid_size, env.grid_size])
     if plot_sr is None:
         im = ax.imshow(
-            V.reshape(env.grid_size, env.grid_size), cmap="RdBu", vmin=-1.0, vmax=1.0
+            V.reshape(env.grid_size, env.grid_size), cmap="RdBu", vmin=vmin, vmax=vmax
         )
     else:
         im = ax.imshow(plot_sr, cmap="PiYG", vmin=-1.0, vmax=1.0)
