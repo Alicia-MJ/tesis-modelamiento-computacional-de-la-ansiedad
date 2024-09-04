@@ -45,10 +45,11 @@ class BaseAgent:
             if npr.rand() < self.epsilon:
                 action = npr.choice(self.action_size)
             else:
-                if all(value == 0 for value in policy_logits): 
-                    action = npr.choice(self.action_size)
-                else:                
-                    action = np.argmax(policy_logits)
+                #if all(value == 0 for value in policy_logits): 
+                #    action = npr.choice(self.action_size)
+                #else:                
+                action = np.argmax(policy_logits)
+                
         return action
 
 
