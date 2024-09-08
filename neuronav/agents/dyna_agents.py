@@ -219,6 +219,7 @@ class DynaSR_AB(TDSR_AB):
         beta: float = 1e4,
         epsilon: float = 1e-1,
         num_recall:int = 5,
+        w_value: float = 1.0,
         lr_p: float = 1e-1,
 
     ):
@@ -231,6 +232,7 @@ class DynaSR_AB(TDSR_AB):
             beta=beta,
             epsilon=epsilon,
             lr_p=lr_p,
+            w_value=w_value
         )
         self.num_recall = num_recall
         self.dyna = DynaModule(state_size, self.num_recall)
