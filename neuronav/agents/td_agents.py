@@ -649,7 +649,7 @@ class TDSR_AB(QAgent):
 
     def _update(self, current_exp, **kwargs):
         s, a, s_1, r, d = current_exp
-        m_error = self.update_sr(s, a, s_1, d, r **kwargs)
+        m_error = self.update_sr(s, a, s_1, d, r, **kwargs)
         w_error = self.update_w(s, s_1, r, a)
         q_error = self.q_error(s, a, s_1, r, d)
         return q_error
