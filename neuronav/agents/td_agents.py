@@ -474,7 +474,6 @@ class TDSR_RP(QAgent):
             error = reward - self.w[state_1]
             self.w[state_1] += self.lr * error
 
-
         return np.linalg.norm(error)
 
     def update_sr(self, s, s_a, s_1, d, next_exp=None, prospective=False):
@@ -534,6 +533,148 @@ class TDSR_RP(QAgent):
     @property
     def Q(self):
         return self.M @ self.w
+
+
+
+
+class TDSR_AB(QAgent):
+    """
+    Implementation of one-step temporal difference (TD) Successor Representation Algorithm
+    """
+
+    def __init__(
+        self,
+        state_size: int,
+        action_size: int,
+        lr: float = 1e-1,
+        gamma: float = 0.99,
+        poltype: str = "softmax",
+        beta: float = 1e4,
+        epsilon: float = 1e-1,
+        M_init=None,
+        weights: str = "direct",
+        goal_biased_sr: bool = True,
+        bootstrap: str = "max-min",
+        w_value: float = 1.0,
+        lr_p: float = 1e-1,
+    ):
+        super().__init__(
+            state_size,
+            action_size,
+            lr,
+            gamma,
+            poltype,
+            beta,
+            epsilon,
+            bootstrap,
+            w_value,
+        )
+        self.lr_p=lr_p
+        self.weights = weights
+        self.goal_biased_sr = goal_biased_sr
+
+        if M_init is None:
+            self.M = np.stack([np.identity(state_size) for i in range(action_size)])
+        elif np.isscalar(M_init):
+            self.M = np.stack(
+                [M_init * npr.randn(state_size, state_size) for i in range(action_size)]
+            )
+        else:
+            self.M = M_init
+
+        self.w = np.zeros(state_size)
+
+    def m_estimate(self, state):
+        return self.M[:, state, :]
+
+    def q_estimate(self, state):
+        return self.M[:, state, :] @ self.w
+
+    def sample_action(self, state):
+        logits = self.q_estimate(state)
+        return self.base_sample_action(logits)
+
+    def update_w(self, state, state_1, reward, a):
+        if self.weights =="rew_pun":
+
+            if reward>=0:
+                error = reward - self.w_r[state_1]
+                self.w_r[state_1] += self.lr * error
+            elif reward<0:
+                error = reward - self.w_p[state_1]
+                self.w_p[state_1] += self.lr_p * error
+            
+            self.w[state_1] = self.w_r[state_1] + self.w_p[state_1]
+                
+        if self.weights == "direct":
+            error = reward - self.w[state_1]
+            self.w[state_1] += self.lr * error
+
+        return np.linalg.norm(error)
+
+    def update_sr(self, s, s_a, s_1, d, r, next_exp=None, prospective=False):
+        # determines whether update is on-policy or off-policy
+        if next_exp is None:
+            
+            s_a_1_optim = np.argmax(self.q_estimate(s_1))
+            s_a_1_pessim = np.argmin(self.q_estimate(s_1))          
+
+        #faltaría ajustar el código para cuando sí se pase el argumento de next_exp
+        #else:
+        #    s_a_1 = next_exp[1]
+
+        I = utils.onehot(s, self.state_size)
+        if d:
+            m_error = (
+                I + self.gamma * utils.onehot(s_1, self.state_size) - self.M[s_a, s, :]
+            )
+        else:
+            if self.goal_biased_sr:
+
+                next_m =  (       self.w_value * self.m_estimate(s_1)[s_a_1_optim]
+                + (1 - self.w_value) * self.m_estimate(s_1)[s_a_1_pessim]            )
+
+            else:
+                next_m = self.m_estimate(s_1).mean(0)
+            m_error = I + self.gamma * next_m - self.M[s_a, s, :]
+
+        if not prospective:
+            # actually perform update to SR if not prospective
+            if r >= 0:
+                self.M[s_a, s, :] += self.lr * m_error
+            elif r < 0:
+                self.M[s_a, s, :] += self.lr_p * m_error
+
+        return m_error
+
+    def _update(self, current_exp, **kwargs):
+        s, a, s_1, r, d = current_exp
+        m_error = self.update_sr(s, a, s_1, d, r **kwargs)
+        w_error = self.update_w(s, s_1, r, a)
+        q_error = self.q_error(s, a, s_1, r, d)
+        return q_error
+
+    def get_policy(self, M=None, goal=None):
+        if goal is None:
+            goal = self.w
+
+        if M is None:
+            M = self.M
+
+        Q = M @ goal
+        return self.base_get_policy(Q)
+
+    def get_M_states(self):
+        # average M(a, s, s') according to policy to get M(s, s')
+        policy = self.get_policy()
+        M = np.diagonal(np.tensordot(policy.T, self.M, axes=1), axis1=0, axis2=1).T
+        return M
+
+    @property
+    def Q(self):
+        return self.M @ self.w
+
+
 
 
 
