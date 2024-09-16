@@ -298,6 +298,11 @@ class TDSR(QAgent):
 
     def m_estimate(self, state):
         return self.M[:, state, :]
+    
+    def q_convergence(self):
+        q_matrix = self.M @ self.w
+        return np.linalg.norm(q_matrix,2)
+
 
     def q_estimate(self, state):
         return self.M[:, state, :] @ self.w
@@ -449,6 +454,10 @@ class TDSR_RP(QAgent):
 
     def m_estimate(self, state):
         return self.M[:, state, :]
+    
+    def q_convergence(self):
+        q_matrix = self.M @ self.w
+        return np.linalg.norm(q_matrix,2)
 
     def q_estimate(self, state):
         return self.M[:, state, :] @ self.w
