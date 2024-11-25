@@ -1,4 +1,5 @@
-# Thesis project: The computational study of anxiety using AI algorithms
+# Thesis project: 
+## The computational study of anxiety using AI algorithms
 
 Neuro-Nav (Juliani, A. et. al, 2022), an open-source library for neurally plausible reinforcement learning (RL), was used to perform the simulations and program the RL models developed in the thesis project.  
 
