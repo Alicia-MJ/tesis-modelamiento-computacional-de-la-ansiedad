@@ -1,4 +1,4 @@
-# Thesis project: 
+# Thesis project 
 ## The computational study of anxiety using AI algorithms
 
 Neuro-Nav (Juliani, A. et. al, 2022), an open-source library for neurally plausible reinforcement learning (RL), was used to perform the simulations and program the RL models developed in the thesis project.  
@@ -35,13 +35,6 @@ Neuro-Nav is an open source project.
 ## Reference
 
 
-```
-@inproceedings{neuronav2022,
-  Author = {Juliani, Arthur and Barnett, Samuel and Davis, Brandon and Sereno, Margaret and Momennejad, Ida},
-  Title = {Neuro-Nav: A Library for Neurally-Plausible Reinforcement Learning},
-  Year = {2022},
-  BookTitle = {The 5th Multidisciplinary Conference on Reinforcement Learning and Decision Making},
-}
-```
+* Juliani, A., Barnett, S., Davis, B., Sereno, M., & Momennejad, I. (2022). Neuro-Nav: A Library for Neurally-Plausible Reinforcement Learning. The 5th Multidisciplinary Conference on Reinforcement Learning and Decision Making.
 
 
