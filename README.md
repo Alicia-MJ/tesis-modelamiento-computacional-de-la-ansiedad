@@ -21,7 +21,7 @@ See abstract [here](https://www.main2024.org/abstracts).
 
 A Google Colab Notebook includes the simulations made for the thesis project. 
 
-See [notebook](./notebook) for more information.
+See [Notebook.ipynb](./Notebook.ipynb) for more information.
 
 
 ## Requirements
