@@ -157,8 +157,7 @@ class TDSR_RP(BaseAgent):
             gamma,
             poltype,
             beta,
-            epsilon,
-            bootstrap,
+            epsilon
         )
         self.lr_p=lr_p
         self.weights = weights
