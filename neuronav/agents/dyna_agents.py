@@ -58,73 +58,7 @@ class DynaModule:
         return base_agent
 
 
-class DynaQ(TDQ):
-    """
-    Dyna-enabled version of Temporal Difference Q-learning algorithm.
-    """
 
-    def __init__(
-        self,
-        state_size: int,
-        action_size: int,
-        lr: float = 1e-1,
-        gamma: float = 0.99,
-        poltype: str = "egreedy",
-        beta: float = 1e4,
-        epsilon: float = 1e-1,
-        w_value: float = 1.0,
-        bootstrap: str = "max-min", 
-        num_recall:int = 5,
-    ):
-        super(DynaQ, self).__init__(
-            state_size,
-            action_size,
-            lr=lr,
-            gamma=gamma,
-            poltype=poltype,
-            beta=beta,
-            epsilon=epsilon,
-            bootstrap=bootstrap,
-            w_value=w_value,
-
-        )
-        self.num_recall = num_recall
-        self.dyna = DynaModule(state_size, self.num_recall)
-
-    def update(self, current_exp):
-        _ = super().update(current_exp)
-        self = self.dyna.update(self, current_exp)
-
-
-class DynaAC(TDAC):
-    """
-    Dyna-enabled version of Temporal Difference Actor Critic algorithm.
-    """
-
-    def __init__(
-        self,
-        state_size: int,
-        action_size: int,
-        lr: float = 1e-1,
-        gamma: float = 0.99,
-        poltype: str = "softmax",
-        beta: float = 1e4,
-        epsilon: float = 1e-1,
-    ):
-        super(DynaAC, self).__init__(
-            state_size,
-            action_size,
-            lr=lr,
-            gamma=gamma,
-            poltype=poltype,
-            beta=beta,
-            epsilon=epsilon,
-        )
-        self.dyna = DynaModule(state_size)
-
-    def update(self, current_exp):
-        _ = super().update(current_exp)
-        self = self.dyna.update(self, current_exp)
 
 
 class DynaSR(TDSR):
