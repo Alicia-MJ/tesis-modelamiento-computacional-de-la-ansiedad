@@ -15,6 +15,8 @@ See [agents](./agents) for more information.
 
 "The Impact of Punishment Sensitivity and Learning Rate on Anxiety: A Computational Modeling Approach in a Sequential Evaluation Task".
 
+See abstract [here](https://www.main2024.org/abstracts).
+
 ## Experiment Notebook
 
 A Google Colab Notebook includes the simulations made for the thesis project. 
@@ -26,9 +28,7 @@ See [notebook](./notebook) for more information.
 
 Requirements for the `neuronav` library can be found [here](./setup.py).
 
-## Contributing
 
-Neuro-Nav is an open source project.
 
 
 
