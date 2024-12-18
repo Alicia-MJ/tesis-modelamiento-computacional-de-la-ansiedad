@@ -6,7 +6,7 @@ These consist of implementations of the canonical Successor Representation algor
 
 The algorithms included here are all tabular. Tabular algorithms work with observations that are integer representations of the state of the agent (e.g., which grid the agent is in a grid world). This corresponds to the `index` observation type.
 
-If you are interested in algorithms which use function approximation (deep-rl), see [here](../deep_agents/README.md).
+
 
 ## Included algorithms
 

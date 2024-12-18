@@ -1,6 +1,6 @@
 # Benchmark Environments
 
-A set of cognitive neuroscience inspired navigation and decision making tasks in environments that have either a grid or graph structure.
+A set of cognitive neuroscience inspired navigation and decision making tasks in environments that have grid structure.
 
 These environments support the default `gym` interface which is commonly used in open source reinforcement learning packages. You can learn more about gym [here](https://github.com/openai/gym).
 
@@ -36,9 +36,6 @@ To add your own, edit [grid_env.py](./grid_env.py).
 
 * Where `n` is the length of the grid.
 
-#### 3D Rendering
-
-Note: In order to use the 3D rendering observation type on linux machines without a display ("headless"), you must have the `xvfb` package installed. You can install it with `sudo apt-get install xvfb`.
 
 ### Objects
 
@@ -81,45 +78,3 @@ The `GridEnv` class can generate a variety of different maze layouts by selectin
 | two_step | ![two_step](/images/grid_small/two_step.png) | ![two_step](/images/grid_large/two_step.png) | |
 | narrow | ![narrow](/images/grid_small/narrow.png) | ![narrow](/images/grid_large/narrow.png) | [Zorowitz et al., 2020](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8143038/) |
 
-## GraphEnv
-
-`GraphEnv` consists of a simple graph environment with various layout structures and observation types.
-
-### Observation Types
-
-The `GraphEnv` class also supports a variety of observation types for the agent. These vary in the amount of information provided to the agent, and in their format.
-
-Observation types can be set as an enum when initializing the environment. For example:
-
-```env = GraphEnv(obs_type=GraphObservation.index)```
-
-To add your own, edit [graph_env.py](./graph_env.py).
-
-| Observation | Type | Shape | Description |
-| --- | --- | --- | --- |
-| index | Tabular | `[1]` | An integer number representing the current state of the agent in the environment. |
-| onehot | Function-Approx | `[n]` | A one-hot encoding of the current state of the agent in the environment. |
-| images | Function-Approx | `[32, 32, 3]` | `[32, 32, 3` | A 3D tensor corresponding to a unique CIFAR10 image per state. |
-
-* Where `n` is the number of nodes in the graph.
-
-### Templates
-
-Graph templates can be set as an enum when initializing the environment. For example:
-
-```env = GraphEnv(template=GraphTemplate.neighborhood)```
-
-The graph templates can be added to by editing [graph_templates.py](./graph_templates.py)
-
-| Template | Image | Reference |
-| --- | --- | --- |
-| two_step | ![two_step](/images/graph/two_step.png) |
-| linear | ![linear](/images/graph/linear.png) |
-| t_graph | ![t_graph](/images/graph/t_graph.png) |
-| neighborhood | ![neighborhood](/images/graph/neighborhood.png) | [Schapiro et al., 2013](https://www.nature.com/articles/nn.3331) |
-| ring | ![ring](/images/graph/ring_graph.png) |
-| two_way_linear | ![two_way_linear](/images/graph/two_way_linear.png) |
-| human_a | ![human_a](/images/graph/human_a.png) | [Momennejad et al., 2017](https://www.nature.com/articles/s41562-017-0180-8) |
-| human_b | ![human_b](/images/graph/human_b.png) | [Momennejad et al., 2017](https://www.nature.com/articles/s41562-017-0180-8) |
-| t_loop | ![t_loop](/images/graph/t_loop.png) |
-| variable_magnitude | ![variable_magnitude](/images/graph/variable_magnitude.png) | [Dabney et al., 2020](https://www.nature.com/articles/s41586-019-1924-6) |
