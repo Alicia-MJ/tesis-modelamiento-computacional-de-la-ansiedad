@@ -198,7 +198,7 @@ class DynaSR_ET(TDSR_ET):
         lambd: float = 0.0, 
 
     ):
-        super(DynaSR_AB, self).__init__(
+        super(DynaSR_ET, self).__init__(
             state_size,
             action_size,
             lr=lr,
