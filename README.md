@@ -3,10 +3,12 @@
 
 Neuro-Nav (Juliani, A. et. al, 2022), una librería de código abierto para aprendizaje por refuerzo (RL) neronalmente plausible, fue usada para programar la tarea experimental y como base para programar y desarrollar los modelos de RL que se usaron en el proyecto de tesis.   
 
-Las principales modificaciones añadidas a la librería son los siguientes dos modelos:  
+Las principales modificaciones añadidas a la librería son los siguientes:  
 
-- DynaSR - refieriéndose a la implementación del modelo Dyna B-pessimistic SR.
-- DynaSR_RP - refieriéndose a la implementación del modelo Dyna \alpha-SR model implementation.
+- Al modelo TDSR se le incluyó la variación B-pessimisitc en la función de actualización de las representaciones sucecsoras.
+- Se creó el modelo TDSR_RP para incluir en el modelo SR diferentes tasas de aprendizajes para los castigos y las recompensas. 
+- DynaSR - refieriéndose a la implementación del modelo Dyna B-pessimistic SR, usando como base el modelo TDSR. 
+- DynaSR_RP - refieriéndose a la implementación del modelo Dyna \alpha-SR model implementation, usando como base el modelo TDSR_RP.
 
 Ver los [agentes](./agents) para más información.
 
