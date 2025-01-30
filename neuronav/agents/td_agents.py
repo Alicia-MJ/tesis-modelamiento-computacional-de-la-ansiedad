@@ -6,22 +6,23 @@ from neuronav.agents.base_agent import BaseAgent
 
 class TDSR(BaseAgent):
     """
-    Implementation of one-step temporal difference (TD) Successor Representation Algorithm
+    Implementación del método de diferencia temporal (considerando un paso) al algoritmo Successor Representator, 
+    así como la variación B-pessimisitic. 
     """
 
     def __init__(
         self,
         state_size: int,
         action_size: int,
-        lr: float = 1e-1,
-        gamma: float = 0.99,
-        poltype: str = "softmax",
-        beta: float = 1e4,
-        epsilon: float = 1e-1,
-        M_init=None,
-        weights: str = "direct",
-        goal_biased_sr: bool = True,
-        w_value: float = 1.0,
+        lr: float = 1e-1,          #tasa de aprendizaje
+        gamma: float = 0.99,       #factor de descuento
+        poltype: str = "softmax",  #política
+        beta: float = 1e4,         #no se usa
+        epsilon: float = 1e-1,     #valor de epsilon
+        M_init=None,               #Matriz de representaciones sucesoras
+        weights: str = "direct",   #vector de recompensas
+        goal_biased_sr: bool = True,  #sirve para actualizar M considerando la variación B-pessimistic
+        w_value: float = 1.0,         #omega
     ):
         super().__init__(
             state_size,
@@ -36,7 +37,7 @@ class TDSR(BaseAgent):
         self.goal_biased_sr = goal_biased_sr
         self.w_value = w_value
 
-
+#se inicializa M
         if M_init is None:
             self.M = np.stack([np.identity(state_size) for i in range(action_size)])
         elif np.isscalar(M_init):
@@ -48,38 +49,34 @@ class TDSR(BaseAgent):
 
         self.w = np.zeros(state_size)
 
-    def m_estimate(self, state):
+    def m_estimate(self, state):     #estimas la entrada de la matriz M[s,s',:]
         return self.M[:, state, :]
     
-    def q_convergence(self):
+    def q_convergence(self):         #calculas la convergencia de la matriz de valores Q con la norma L2
         q_matrix = self.M @ self.w
         return np.linalg.norm(q_matrix,2)
 
 
-    def q_estimate(self, state):
+    def q_estimate(self, state):       #estima el valor Q de una entrada
         return self.M[:, state, :] @ self.w
 
-    def sample_action(self, state):
+    def sample_action(self, state):    #selecciona una acción
         logits = self.q_estimate(state)
         return self.base_sample_action(logits)
 
-    def update_w(self, state, state_1, reward, a):
+    def update_w(self, state, state_1, reward, a):      #se actualizan la función de recompensa
         if self.weights == "direct":
             error = reward - self.w[state_1]
             self.w[state_1] += self.lr * error
        
         return np.linalg.norm(error)
 
-    def update_sr(self, s, s_a, s_1, d, next_exp=None, prospective=False):
-        # determines whether update is on-policy or off-policy
+    def update_sr(self, s, s_a, s_1, d, next_exp=None, prospective=False):  #se actualiza un vector de la matriz M
+
         if next_exp is None:
             
             s_a_1_optim = np.argmax(self.q_estimate(s_1))
             s_a_1_pessim = np.argmin(self.q_estimate(s_1))          
-
-        #faltaría ajustar el código para cuando sí se pase el argumento de next_exp
-        #else:
-        #    s_a_1 = next_exp[1]
 
         I = utils.onehot(s, self.state_size)
         if d:
@@ -87,7 +84,7 @@ class TDSR(BaseAgent):
                 I + self.gamma * utils.onehot(s_1, self.state_size) - self.M[s_a, s, :]
             )
         else:
-            if self.goal_biased_sr:
+            if self.goal_biased_sr:     #implementación de B-pessimisitc
 
                 next_m =  (       self.w_value * self.m_estimate(s_1)[s_a_1_optim]
                 + (1 - self.w_value) * self.m_estimate(s_1)[s_a_1_pessim]            )
@@ -108,7 +105,7 @@ class TDSR(BaseAgent):
         #q_error = self.q_error(s, a, s_1, r, d)
         return m_error
 
-    def get_policy(self, M=None, goal=None):
+    def get_policy(self, M=None, goal=None):         #permite obtener la acción a realizar obteniendo los valores Q y llamando a un método de la clase padre
         if goal is None:
             goal = self.w
 
@@ -125,7 +122,7 @@ class TDSR(BaseAgent):
         return M
 
     @property
-    def Q(self):
+    def Q(self):         #se obtiene la matriz de valores Q
         return self.M @ self.w
 
 
@@ -140,15 +137,15 @@ class TDSR_RP(BaseAgent):
         self,
         state_size: int,
         action_size: int,
-        lr: float = 1e-1,
-        gamma: float = 0.99,
-        poltype: str = "softmax",
-        beta: float = 1e4,
-        epsilon: float = 1e-1,
-        M_init=None,
-        weights: str = "rew_pun",
-        goal_biased_sr: bool = True,
-        lr_p: float = 1e-1,
+        lr: float = 1e-1,          #tasa de aprendizaje de las recompensas
+        gamma: float = 0.99,       #factor de descuento
+        poltype: str = "egp",      #politica
+        beta: float = 1e4,         #no se usa
+        epsilon: float = 1e-1,     #epsilon
+        M_init=None,               #Matriz de representaciones sucesoras
+        weights: str = "rew_pun",  #vector de recompensas/castigos
+        goal_biased_sr: bool = True,  #sirve para considerar siempre los sucesores considerando la mejor acción del siguiente estado
+        lr_p: float = 1e-1,        #tasa de aprendizaje de los castigos
     ):
         super().__init__(
             state_size,
@@ -164,7 +161,7 @@ class TDSR_RP(BaseAgent):
         self.goal_biased_sr = goal_biased_sr
 
 
-
+        #se inicializa la matriz M
         if M_init is None:
             self.M = np.stack([np.identity(state_size) for i in range(action_size)])
         elif np.isscalar(M_init):
@@ -174,10 +171,10 @@ class TDSR_RP(BaseAgent):
         else:
             self.M = M_init
 
-
+        #se inicializa el vector de las recompensas/castigos
         self.w = np.zeros(state_size)
 
-    def m_estimate(self, state):
+    def m_estimate(self, state):        
         return self.M[:, state, :]
     
     def q_convergence(self):
