@@ -29,7 +29,7 @@ Ver [Notebook.ipynb](./Notebook.ipynb) para más información.
 
 ## Requerimientos
 
-Requirimientos para poder correr el notebook [aquí](./setup.py).
+Requirimientos para poder correr la librería nneuronav y el notebook [aquí](./setup.py).
 
 
 
