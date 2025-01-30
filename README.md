@@ -5,8 +5,8 @@ Neuro-Nav (Juliani, A. et. al, 2022), una librería de código abierto para apre
 
 Las principales modificaciones añadidas a la librería son los siguientes dos modelos:  
 
-- DynaSR_B - refieriéndose a la implementación del modelo Dyna B-pessimistic SR.
-- DynaSR_RP - refieriéndose a la implementación del modelo Dyna a-SR model implementation.
+- DynaSR - refieriéndose a la implementación del modelo Dyna B-pessimistic SR.
+- DynaSR_RP - refieriéndose a la implementación del modelo Dyna \alpha-SR model implementation.
 
 Ver los [agentes](./agents) para más información.
 
