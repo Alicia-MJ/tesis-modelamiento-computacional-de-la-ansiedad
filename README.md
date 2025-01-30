@@ -1,7 +1,7 @@
 # Tesis para obtener el grado de Lic. Psicología de la UNAM
 ## El estudio computacional de la ansiedad con algoritmos de inteligencia artificial
 
-Neuro-Nav (Juliani, A. et. al, 2022), una librería de código abierto para aprendizaje por refuerzo (RL) neronalmente plausible, fue usada para programar la tarea experimenatl y como base para programar y desarrollar los modelos de RL que se usaron en el proyecto de tesis.   
+Neuro-Nav (Juliani, A. et. al, 2022), una librería de código abierto para aprendizaje por refuerzo (RL) neronalmente plausible, fue usada para programar la tarea experimental y como base para programar y desarrollar los modelos de RL que se usaron en el proyecto de tesis.   
 
 Las principales modificaciones añadidas a la librería son los siguientes dos modelos:  
 
@@ -10,6 +10,7 @@ Las principales modificaciones añadidas a la librería son los siguientes dos m
 
 Ver los [agentes](./agents) para más información.
 
+Además, se eliminaron los archivos de código y agentes que no se usaron para el proyecto de tesis. 
 
 ## Poster presentado en MAIN 2024
 
@@ -26,7 +27,7 @@ Ver [Notebook.ipynb](./Notebook.ipynb) para más información.
 
 ## Requerimientos
 
-Requirements para poder correr el notebook [aquí](./setup.py).
+Requirimientos para poder correr el notebook [aquí](./setup.py).
 
 
 
