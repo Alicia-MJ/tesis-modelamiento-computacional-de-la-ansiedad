@@ -10,7 +10,7 @@ Las principales modificaciones añadidas a la librería son los siguientes:
 - DynaSR - refieriéndose a la implementación del modelo Dyna B-pessimistic SR, usando como base el modelo TDSR. 
 - DynaSR_RP - refieriéndose a la implementación del modelo Dyna \alpha-SR model implementation, usando como base el modelo TDSR_RP.
 
-Ver los [agentes](./agents) para más información.
+Ver los [agentes](https://github.com/Alicia-MJ/tesis-modelamiento-computacional-de-la-ansiedad/tree/main/neuronav/agents) para más información.
 
 Además, se eliminaron los archivos de código y agentes que no se usaron para el proyecto de tesis. 
 
