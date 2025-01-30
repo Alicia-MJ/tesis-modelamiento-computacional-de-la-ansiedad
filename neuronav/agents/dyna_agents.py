@@ -5,7 +5,7 @@ from neuronav.agents.td_agents import TDSR, TDSR_RP, TDSR_AB, TDSR_ET
 
 class DynaModule:
     """
-    Class which contains logic to enable Dyna algorithms.
+    Clase que contiene la lógica para programar los algoritmos Dyna.
     """
 
     def __init__(self, state_size, num_recall=5, recency="deterministic", **kwargs):
@@ -63,20 +63,21 @@ class DynaModule:
 
 class DynaSR(TDSR):
     """
-    Dyna-enabled version of Temporal Difference Successor Representation algorithm.
+    Versión Dyna con el método de Diferencias Temporales para el argorimto Succesor Representator incluyendo la variación 
+    B-Pessimistic.
     """
 
     def __init__(
         self,
         state_size: int,
         action_size: int,
-        lr: float = 1e-1,
-        gamma: float = 0.99,
-        poltype: str = "softmax",
-        beta: float = 1e4,
-        epsilon: float = 1e-1,
-        w_value: float = 1.0,
-        num_recall:int = 5
+        lr: float = 1e-1,        #tasa de aprendizaje
+        gamma: float = 0.99,     #factor de descuento
+        poltype: str = "egp",    #política epsilon-greedy
+        beta: float = 1e4,       #no se usa
+        epsilon: float = 1e-1,   #valor de epsilon
+        w_value: float = 1.0,    # valor de omega
+        num_recall:int = 5       #corresponde al número de simulaciones del módulo Dyna
 
     ):
         super(DynaSR, self).__init__(
@@ -92,8 +93,6 @@ class DynaSR(TDSR):
         self.num_recall = num_recall
         self.dyna = DynaModule(state_size, self.num_recall)
 
-
-
     def update(self, current_exp):
         _ = super().update(current_exp)
         self = self.dyna.update(self, current_exp)
@@ -101,20 +100,21 @@ class DynaSR(TDSR):
 
 class DynaSR_RP(TDSR_RP):
     """
-    Dyna-enabled version of Temporal Difference Successor Representation algorithm.
+    Versión Dyna con el método de Diferencias Temporales para el argorimto Succesor Representator incluyendo la variación
+    con distintas tasas de aprendizaje para los castigos y las recompensas. 
     """
 
     def __init__(
         self,
         state_size: int,
         action_size: int,
-        lr: float = 1e-1,
-        gamma: float = 0.99,
-        poltype: str = "softmax",
-        beta: float = 1e4,
-        epsilon: float = 1e-1,
-        num_recall:int = 5,
-        lr_p: float = 1e-1,
+        lr: float = 1e-1,        #tasa de aprendizaje de las recompensas y las representaciones sucesoras
+        gamma: float = 0.99,     #factor de descuento
+        poltype: str = "egp",    #política epsilon-greedy
+        beta: float = 1e4,       #no se usa
+        epsilon: float = 1e-1,   #epsilon
+        num_recall:int = 5,      #corresponde al número de simulaciones del módulo Dyna
+        lr_p: float = 1e-1,      #tasa de aprendizaje de los castigos
 
     ):
         super(DynaSR_RP, self).__init__(
@@ -129,8 +129,6 @@ class DynaSR_RP(TDSR_RP):
         )
         self.num_recall = num_recall
         self.dyna = DynaModule(state_size, self.num_recall)
-
-
 
     def update(self, current_exp):
         _ = super().update(current_exp)
