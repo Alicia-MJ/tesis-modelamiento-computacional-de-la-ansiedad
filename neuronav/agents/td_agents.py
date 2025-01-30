@@ -173,24 +173,29 @@ class TDSR_RP(BaseAgent):
 
         #se inicializa el vector de las recompensas/castigos
         self.w = np.zeros(state_size)
-
+        
+    #estimas la entrada de la matriz M[s,s',:]
     def m_estimate(self, state):        
         return self.M[:, state, :]
-    
+
+    #calculas la convergencia de la matriz de valores Q con la norma L2
     def q_convergence(self):
         q_matrix = self.M @ self.w
         return np.linalg.norm(q_matrix,2)
 
+    #estima el valor Q de una entrada
     def q_estimate(self, state):
         return self.M[:, state, :] @ self.w
 
+    #selecciona una acción
     def sample_action(self, state):
         logits = self.q_estimate(state)
         return self.base_sample_action(logits)
 
+    #se actualizan la función de recompensa
     def update_w(self, state, state_1, reward, a):
         
-        if self.weights =="rew_pun":
+        if self.weights =="rew_pun":                #perimite usar diferentes tasas de aprendizare para recompensas o castigos
             
             if reward>=0:
                 error = reward - self.w[state_1]
@@ -205,16 +210,12 @@ class TDSR_RP(BaseAgent):
 
         return np.linalg.norm(error)
 
+     #se actualiza un vector de la matriz M
     def update_sr(self, s, s_a, s_1, d, next_exp=None, prospective=False):
         # determines whether update is on-policy or off-policy
         if next_exp is None:
             
             s_a_1= np.argmax(self.q_estimate(s_1))
-
-
-        #faltaría ajustar el código para cuando sí se pase el argumento de next_exp
-        #else:
-        #    s_a_1 = next_exp[1]
 
         I = utils.onehot(s, self.state_size)
         if d:
@@ -259,7 +260,7 @@ class TDSR_RP(BaseAgent):
         return M
 
     @property
-    def Q(self):
+    def Q(self):             #obtienes toda la matriz de valores Q
         return self.M @ self.w
 
 
