@@ -1,38 +1,38 @@
-# Thesis project 
-## The computational study of anxiety using AI algorithms
+# Tesis para obtener el grado de Lic. Psicología de la UNAM
+## El estudio computacional de la ansiedad con algoritmos de inteligencia artificial
 
-Neuro-Nav (Juliani, A. et. al, 2022), an open-source library for neurally plausible reinforcement learning (RL), was used to perform the simulations and program the RL models developed in the thesis project.  
+Neuro-Nav (Juliani, A. et. al, 2022), es una librería de código abierto para aprendizaje por refuerzo (RL) neruonalmente plausible, fue usada para programar la tarea experimenatl y como base para programar y desarrollar los modelos de RL que se usaron en el proyecto de tesis.   
 
-The main modifications added to the neronav library are the following two models implementations: 
+Las principales modificaciones añadidas a la librería son los siguientes dos modelos:  
 
-- DynaSR_B - refeering to the Dyna B-pessimistic SR model implementation.
-- DynaSR_RP - refeering to the Dyna a-SR model implementation.
+- DynaSR_B - refieriéndose a la implementación del modelo Dyna B-pessimistic SR.
+- DynaSR_RP - refieriéndose a la implementación del modelo Dyna a-SR model implementation.
 
-See [agents](./agents) for more information.
+Ver los [agentes](./agents) para más información.
 
 
-## Poster presented at MAIN 2024
+## Poster presentado en MAIN 2024
 
 "The Impact of Punishment Sensitivity and Learning Rate on Anxiety: A Computational Modeling Approach in a Sequential Evaluation Task".
 
-See abstract [here](https://www.main2024.org/abstracts).
+Ver abstract [here](https://www.main2024.org/abstracts).
 
-## Experiment Notebook
+## Notebook con los experimentos
 
-A Google Colab Notebook includes the simulations made for the thesis project. 
+Un Notebook de Google Colab Notebook las simulaciones hechas en la tarea experimental para el proyecto de tesis. 
 
-See [Notebook.ipynb](./Notebook.ipynb) for more information.
-
-
-## Requirements
-
-Requirements for the `neuronav` library can be found [here](./setup.py).
+Ver [Notebook.ipynb](./Notebook.ipynb) para más información.
 
 
+## Requerimientos
+
+Requirements para poder correr el notebook [aquí](./setup.py).
 
 
 
-## Reference
+
+
+## Referencia
 
 
 * Juliani, A., Barnett, S., Davis, B., Sereno, M., & Momennejad, I. (2022). Neuro-Nav: A Library for Neurally-Plausible Reinforcement Learning. The 5th Multidisciplinary Conference on Reinforcement Learning and Decision Making.
