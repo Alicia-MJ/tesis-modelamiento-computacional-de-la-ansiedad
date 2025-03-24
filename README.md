@@ -14,7 +14,7 @@ Ver los [agentes](https://github.com/Alicia-MJ/tesis-modelamiento-computacional-
 
 Además, se eliminaron los archivos de código y agentes que no se usaron para el proyecto de tesis. 
 
-## Poster presentado en MAIN 2024
+## Póster presentado en MAIN 2024 (Montréal Artificial Intelligence and Neuroscience)
 
 "The Impact of Punishment Sensitivity and Learning Rate on Anxiety: A Computational Modeling Approach in a Sequential Evaluation Task".
 
