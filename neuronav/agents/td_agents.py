@@ -234,7 +234,7 @@ class TDSR_RP(BaseAgent):
 
         if not prospective:
             # actually perform update to SR if not prospective
-            self.M[s_a, s, :] += self.lr * m_error
+            self.M[s_a, s, :] += 0.1 * m_error
         return m_error
 
     def _update(self, current_exp, **kwargs):
