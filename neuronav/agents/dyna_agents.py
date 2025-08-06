@@ -1,6 +1,6 @@
 import numpy as np
 import numpy.random as npr
-from neuronav.agents.td_agents import TDSR, TDSR_RP, TDSR_AB, TDSR_ET
+from neuronav.agents.td_agents import TDSR, TDSR_RP
 
 
 class DynaModule:
